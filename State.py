@@ -80,17 +80,7 @@ class State:
 
     #__gt__ and __str__
     def __str__(state):
-        return f"{state.getName() : <15}{'TEST2' : <15}"
-        """return state.getName() + \
-             "\t" + state.getCapitol() + \
-                "\t" + state.getReigon() + \
-                     "\t" + state.getHouseSeats() + \
-                         "\t" + state.getCovidCases() + \
-                             "\t" + state.getCovidDeaths() + \
-                                 "\t" + state.getFullVaxRates() + \
-                                     "\t" + state.getMedHouseIncome() + \
-                                         "\t" + state.getViolentCrime()
-"""
+        return f"{state.getName() : <20}{state.getCapitol() : <20}{state.getReigon() : <20}{state.getHouseSeats() : <20}{state.getCovidCases() : <20}{state.getCovidDeaths() : <20}{state.getFullVaxRates() : <20}{state.getMedHouseIncome() : <20}{state.getViolentCrime() : <20}" 
 
     def __gt__(state, other):
-        return 
+        return state.name > other.name
