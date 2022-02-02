@@ -8,16 +8,17 @@ Email: n01402670@unf.edu
 
 class State:
     # INITIALIZER #
-    def __init__(state, name, capitol, reigon, houseSeats, covidCases, covidDeaths, fullVaxRates, medHouseIncome, violentCrime):
+    def __init__(state, name, capitol, reigon, houseSeats, population, covidCases, covidDeaths, fullVax, medHouseIncome, violentCrime):
         state.name = name
         state.capitol = capitol
         state.reigon = reigon
         state.houseSeats = houseSeats
+        state.population = population
         state.covidCases = covidCases
         state.covidDeaths = covidDeaths
-        state.fullVaxRates = fullVaxRates
+        state.fullVax = fullVax
         state.medHouseIncome = medHouseIncome
-        state.violentCrime = violentCrime
+        state.violentCrime = violentCrime.replace('\n','')
     
     # GETTER METHODS #
     def getName(state):
@@ -32,20 +33,35 @@ class State:
     def getHouseSeats(state):
         return state.houseSeats
 
+    def getPopulation(state):
+        return state.population
+    
     def getCovidCases(state):
         return state.covidCases
 
     def getCovidDeaths(state):
         return state.covidDeaths
 
-    def getFullVaxRates(state):
-        return state.fullVaxRates
+    def getFullVax(state):
+        return state.fullVax
 
     def getMedHouseIncome(state):
         return state.medHouseIncome
 
-    def getViolentCrime(state):
+    def getViolentCrimeRate(state):
         return state.violentCrime
+
+    def getMortalityRate(state): #case fatality rate
+        return round(float(state.getCovidDeaths()) / float(state.getCovidCases()), 6)
+
+    def getCaseRate(state):
+        return round(float(state.covidCases) / float(state.population) * 100000, 2)
+    
+    def getDeathRate(state):
+        return round(float(state.covidDeaths) / float(state.population) * 100000, 2)
+
+    def getFullVaxRate(state):
+        return round(float(state.fullVax) / 100, 3)
     # END OF GETTER METHODS #
 
     # SETTER METHODS #
@@ -61,14 +77,17 @@ class State:
     def setHouseSeats(state, newHouseSeats):
         state.houseSeats = newHouseSeats
 
+    def setPopulation(state, newPopulation):
+        state.population = newPopulation
+
     def setCovidCases(state, newCovidCases):
         state.covidCases = newCovidCases
 
     def setCovidDeaths(state, newCovidDeaths):
         state.covidDeaths = newCovidDeaths
 
-    def setFullVaxRates(state, newFullVaxRates):
-        state.fullVaxRates = newFullVaxRates
+    def setFullVax(state, newFullVax):
+        state.fullVax = newFullVax
 
     def setMedHouseIncome(state, newMedHouseIncome):
         state.medHouseIncome = newMedHouseIncome
@@ -77,10 +96,9 @@ class State:
         state.violentCrime = newViolentCrime
     # END OF SETTER METHODS #
 
-
     #__gt__ and __str__
     def __str__(state):
-        return f"{state.getName() : <20}{state.getCapitol() : <20}{state.getReigon() : <20}{state.getHouseSeats() : <20}{state.getCovidCases() : <20}{state.getCovidDeaths() : <20}{state.getFullVaxRates() : <20}{state.getMedHouseIncome() : <20}{state.getViolentCrime() : <20}" 
+        return f"{state.getName() : <20}{state.getMedHouseIncome() : <20}{state.getViolentCrimeRate() : <20}{str(state.getMortalityRate()) : <20}{str(state.getCaseRate()) : <20}{str(state.getDeathRate()) : <20}{str(state.getFullVaxRate()) : <20}"
 
     def __gt__(state, other):
         return state.name > other.name
