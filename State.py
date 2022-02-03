@@ -1,11 +1,27 @@
 """
-Detailed description of the module.
+This module contains the class State
+and its subsequent functions, including
+an initializer, getter&setter methods,
+a __str__ method and a __gt__ method.
+
+The __str__ method prints the state's
+information to be formatted properly when
+printing reports in the main project.
+
+__gt__ is used to compare the states based
+on their names.
 
 Author: Hailey Francis
-Version: 1/31/22
+Version: 1/2/22
 Email: n01402670@unf.edu
 """
 
+"""""
+This class takes the information from a line (presumably given by States.csv)
+and turns them into State objects. This contains all of the information, 
+and there are getters and setters for every data attribute (although not all
+of them are used in printing the report.)
+"""""
 class State:
     # INITIALIZER #
     def __init__(state, name, capitol, reigon, houseSeats, population, covidCases, covidDeaths, fullVax, medHouseIncome, violentCrime):
@@ -52,7 +68,7 @@ class State:
         return state.violentCrime
 
     def getMortalityRate(state): #case fatality rate
-        return round(float(state.getCovidDeaths()) / float(state.getCovidCases()), 6)
+        return round(float(state.covidDeaths) / float(state.covidCases), 6)
 
     def getCaseRate(state):
         return round(float(state.covidCases) / float(state.population) * 100000, 2)

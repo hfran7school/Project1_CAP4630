@@ -2,7 +2,7 @@
 Detailed description of the module.
 
 Author: Hailey Francis
-Version: 1/31/22
+Version: 2/2/22
 Email: n01402670@unf.edu
 """
 
@@ -148,8 +148,10 @@ def findState(stateList, sortedByName):
 
 #print Spearmans p correlation matrix
 
-print("CAP4630 Project 1")
-print("Author: Hailey Francis")
+
+# MAIN #
+print("CAP4630 Project 1 -- Python Basics")
+print("Author: Hailey Francis (n01402670@unf.edu")
 stateList = makeList()
 reportLength = len(stateList)
 print("\nThere were " + str(reportLength) + " state records read from States.csv")
@@ -176,7 +178,7 @@ while op != "6":
         #print Spearman's rho matrix
         i = 0
     elif(op == "6"):
-        print("Thank you! Goodbye!")
+        print("\nThank you! Goodbye!\n")
     else:
         print("\nInvalid Option. Please try again!")
 
