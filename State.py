@@ -12,17 +12,16 @@ __gt__ is used to compare the states based
 on their names.
 
 Author: Hailey Francis
-Version: 1/2/22
+Version: 2/2/22
 Email: n01402670@unf.edu
 """
-
-"""""
-This class takes the information from a line (presumably given by States.csv)
-and turns them into State objects. This contains all of the information, 
-and there are getters and setters for every data attribute (although not all
-of them are used in printing the report.)
-"""""
 class State:
+    """""
+    This class takes the information from a line (presumably given by States.csv)
+    and turns them into State objects. This contains all of the information, 
+    and there are getters and setters for every data attribute (although not all
+    of them are used in printing the report.)
+    """""
     # INITIALIZER #
     def __init__(state, name, capitol, reigon, houseSeats, population, covidCases, covidDeaths, fullVax, medHouseIncome, violentCrime):
         state.name = name
