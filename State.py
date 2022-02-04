@@ -12,7 +12,7 @@ __gt__ is used to compare the states based
 on their names.
 
 Author: Hailey Francis
-Version: 2/2/22
+Version: 2/3/22
 Email: n01402670@unf.edu
 """
 class State:
@@ -23,7 +23,7 @@ class State:
     of them are used in printing the report.)
     """""
     # INITIALIZER #
-    def __init__(state, name, capitol, reigon, houseSeats, population, covidCases, covidDeaths, fullVax, medHouseIncome, violentCrime):
+    def __init__(state, name, capitol, reigon, houseSeats, population, covidCases, covidDeaths, fullVax, medHouseIncome, violentCrimeRate):
         state.name = name
         state.capitol = capitol
         state.reigon = reigon
@@ -33,7 +33,7 @@ class State:
         state.covidDeaths = covidDeaths
         state.fullVax = fullVax
         state.medHouseIncome = medHouseIncome
-        state.violentCrime = violentCrime.replace('\n','')
+        state.violentCrimeRate = violentCrimeRate.replace('\n','')
     
     # GETTER METHODS #
     def getName(state):
@@ -64,19 +64,19 @@ class State:
         return state.medHouseIncome
 
     def getViolentCrimeRate(state):
-        return state.violentCrime
+        return float(state.violentCrimeRate)
 
     def getMortalityRate(state): #case fatality rate
-        return round(float(state.covidDeaths) / float(state.covidCases), 6)
+        return float(state.covidDeaths) / float(state.covidCases)
 
     def getCaseRate(state):
-        return round(float(state.covidCases) / float(state.population) * 100000, 2)
+        return float(state.covidCases) / float(state.population) * 100000
     
     def getDeathRate(state):
-        return round(float(state.covidDeaths) / float(state.population) * 100000, 2)
+        return float(state.covidDeaths) / float(state.population) * 100000
 
     def getFullVaxRate(state):
-        return round(float(state.fullVax) / 100, 3)
+        return float(state.fullVax) / 100
     # END OF GETTER METHODS #
 
     # SETTER METHODS #
@@ -107,13 +107,13 @@ class State:
     def setMedHouseIncome(state, newMedHouseIncome):
         state.medHouseIncome = newMedHouseIncome
 
-    def setViolentCrime(state, newViolentCrime):
-        state.violentCrime = newViolentCrime
+    def setViolentCrimeRate(state, newviolentCrimeRate):
+        state.violentCrimeRate = newviolentCrimeRate
     # END OF SETTER METHODS #
 
     #__gt__ and __str__
     def __str__(state):
-        return f"{state.getName() : <20}{state.getMedHouseIncome() : <20}{state.getViolentCrimeRate() : <20}{str(state.getMortalityRate()) : <20}{str(state.getCaseRate()) : <20}{str(state.getDeathRate()) : <20}{str(state.getFullVaxRate()) : <20}"
+        return f"{state.getName() : <20}{state.getMedHouseIncome() : <20}{state.getViolentCrimeRate() : <20}{format(state.getMortalityRate(), '.6f') : <20}{format(state.getCaseRate(), '.2f') : <20}{format(state.getDeathRate(), '.2f') : <20}{format(state.getFullVaxRate(), '.3f') : <20}"
 
     def __gt__(state, other):
         return state.name > other.name

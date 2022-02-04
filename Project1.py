@@ -12,7 +12,7 @@ giving a Spearman's rho matrix based
 on the data.
 
 Author: Hailey Francis
-Version: 2/2/22
+Version: 2/3/22
 Email: n01402670@unf.edu
 """
 from State import State;
@@ -60,7 +60,7 @@ def printReport(stateList):
     :return N/A
     """
     print(f"{'Name' : <20}{'MHI' : <20}{'VCR' : <20}{'CFR' : <20}{'Case Rate' : <20}{'Death Rate' : <20}{'FVR' : <20}")
-    print("----------------------------------------------------------------------------------------------------------------------------")
+    print("------------------------------------------------------------------------------------------------------------------------------")
     for st in stateList:
         print(st)
 
@@ -76,11 +76,11 @@ def printStateInfo(state):
     """
     print("\nName: " + state.getName())
     print("MHI: " + state.getMedHouseIncome())
-    print("VCR: " + state.getViolentCrimeRate())
-    print("CFR: " + str(state.getMortalityRate()))
-    print("Case Rate: " + str(state.getCaseRate()))
-    print("Death Rate: " + str(state.getDeathRate()))
-    print("FV Rate: " + str(state.getFullVaxRate()))
+    print("VCR: " + format(state.getViolentCrimeRate(), '.1f'))
+    print("CFR: " + format(state.getMortalityRate(), '.6f'))
+    print("Case Rate: " + format(state.getCaseRate(), '.2f'))
+    print("Death Rate: " + format(state.getDeathRate(), '.2f'))
+    print("FV Rate: " + format(state.getFullVaxRate(), '.3f'))
 
 def quickPart(stateList, low, high):
     """
@@ -120,7 +120,7 @@ def sortByName(stateList, low, high):
         sortByName(stateList, low, pi-1)
         sortByName(stateList, pi + 1, high)
 
-def sortByFatalityRate(stateList):
+def mergeSort(stateList, sortBy):
     """
     This is the implementation of merge sort
     that sorts the States in the given list by fatality
@@ -134,16 +134,38 @@ def sortByFatalityRate(stateList):
         LEF = stateList[:mid] #left subarray
         RIG = stateList[mid:] #right subarray
 
-        sortByFatalityRate(LEF)
-        sortByFatalityRate(RIG)
+        mergeSort(LEF, sortBy)
+        mergeSort(RIG, sortBy)
 
-        i = j = k = 0
+        i = j = k = stateLeft = stateRight = 0
 
         while i < len(LEF) and j < len(RIG):
-            stateLeft = LEF[i].getMortalityRate()
-            stateRight = RIG[j].getMortalityRate()
+            if sortBy == "CFR":
+                stateLeft = LEF[i].getMortalityRate()
+                stateRight = RIG[j].getMortalityRate()
+            elif sortBy == "MHI": #med house income
+                stateLeft = LEF[i].getMedHouseIncome()
+                stateRight = RIG[j].getMedHouseIncome()
+            elif sortBy == "VCR": #violent crime rate, saved as a string so coverting to float
+                stateLeft = LEF[i].getViolentCrimeRate()
+                stateLeft = float(stateLeft)
+                stateRight = RIG[j].getViolentCrimeRate()
+                stateRight = float(stateRight)
+            elif sortBy == "FVR": #full vax rate
+                stateLeft = LEF[i].getFullVaxRate()
+                stateRight = RIG[j].getFullVaxRate()
+            elif sortBy == "Case Rate": #case rate
+                stateLeft = LEF[i].getCaseRate()
+                stateRight = RIG[j].getCaseRate()
+            elif sortBy == "Death Rate": #death rate
+                stateLeft = LEF[i].getDeathRate()
+                stateRight = RIG[j].getDeathRate()
 
-            if stateLeft < stateRight:
+            if stateLeft == stateRight:
+                stateLeft = LEF[i]
+                stateRight = RIG[j]
+
+            if stateRight > stateLeft:
                 stateList[k] = LEF[i]
                 i += 1
             else:
@@ -160,6 +182,7 @@ def sortByFatalityRate(stateList):
             stateList[k] = RIG[j]
             j += 1
             k += 1
+        return stateList
 
 def binarySearch(stateList, stateName):
     """
@@ -183,7 +206,7 @@ def binarySearch(stateList, stateName):
             rig = mid - 1
     return -1
     
-def sequentialSearch(stateList, stateName):
+def sequentialSearch(stateList, stateName, rho):
     """
     This is the implementation of sequential sort
     that sorts the States in the given list by fatality
@@ -196,7 +219,10 @@ def sequentialSearch(stateList, stateName):
     i = 0
     while i < size:
         if stateList[i].getName() == stateName:
-            return stateList[i]
+            if rho == False:
+                return stateList[i]
+            else:
+                return i
         else:
             i += 1
     return -1
@@ -221,16 +247,63 @@ def findState(stateList, sortedByName):
         found = binarySearch(stateList, stateName)
     else:
         print("Sequential Search")
-        found = sequentialSearch(stateList, stateName)
+        found = sequentialSearch(stateList, stateName, False)
     if found != -1:
         printStateInfo(found)
     else:
         print("\nState not found.")
 
+
 #print Spearmans p correlation matrix
-#def SpearmansMatrix(stateList):
-#    sum_di = 0
-#    for i in stateList:
+def SpearmansMatrix(stateList):
+    CaseRate = stateList.copy()
+    DeathRate = stateList.copy()
+    MHI = stateList.copy()
+    VCR = stateList.copy()
+    FVR = stateList.copy()
+
+    mergeSort(CaseRate, "Case Rate")
+    mergeSort(DeathRate, "Death Rate")
+    mergeSort(MHI, "MHI")
+    mergeSort(VCR, "VCR")
+    mergeSort(FVR, "FVR")
+
+    x1 = format(SpearmansRho(CaseRate, MHI), '.4f')
+    x2 = format(SpearmansRho(CaseRate, VCR), '.4f')
+    x3 = format(SpearmansRho(CaseRate, FVR), '.4f')
+    x4 = format(SpearmansRho(DeathRate, MHI), '.4f')
+    x5 = format(SpearmansRho(DeathRate, VCR), '.4f')
+    x6 = format(SpearmansRho(DeathRate, FVR), '.4f')
+
+    print("--------------------------------------------------------------------")
+    print("|             |     MHI         |     VCR         |     FVR        |")
+    print("--------------------------------------------------------------------")
+    print("|  Case Rate  |     "+str(x1)+"     |     "+str(x2)+"     |     "+str(x3)+"     |")
+    print("--------------------------------------------------------------------")
+    print("|  Death Rate |     "+str(x4)+"     |     "+str(x5)+"     |     "+str(x6)+"     |")
+    print("--------------------------------------------------------------------")
+
+
+
+    
+def SpearmansRho(stateListR1, stateListR2):
+    size = len(stateListR1) #R1 and R2 should be the same length
+    sum_di_p2 = 0
+    i = 0
+    while i < size:
+        name = stateListR1[i].getName()
+        r1_index = sequentialSearch(stateListR1, name, True)
+        r2_index = sequentialSearch(stateListR2, name, True)
+        di_p2 = (r1_index - r2_index)**2
+        sum_di_p2 += di_p2
+        i += 1
+    
+    rho = float(1 - ((6 * sum_di_p2) / (size * (size**2 - 1))))
+    return rho
+
+
+
+
         
 
 # MAIN #
@@ -253,13 +326,13 @@ while op != "6":
         sortedByName = True
         print("\nState records now sorted alphabetically by state name.")
     elif(op == "3"):
-        sortByFatalityRate(stateList)
+        stateList = mergeSort(stateList, "CFR")
         sortedByName = False
         print("\nState records now sorted by fatality rate (ascending).")
     elif(op == "4"):
         findState(stateList, sortedByName)
     elif(op == "5"):
-        #print Spearman's rho matrix
+        SpearmansMatrix(stateList)
         i = 0
     elif(op == "6"):
         print("\nThank you! Goodbye!\n")
