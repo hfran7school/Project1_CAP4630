@@ -122,9 +122,13 @@ def sortByName(stateList, low, high):
 
 def mergeSort(stateList, sortBy):
     """
-    This is the implementation of merge sort
-    that sorts the States in the given list by fatality
-    rate.
+    This is the implementation of merge sort.
+    Based on the given parameter, it will sort
+    the data by its CFR, MHI, VCR, FVR, Case
+    Rate, or Death Rate. Sorting by CFR is used
+    when the user wants to sort the states report
+    by fatality rate, and the rest are used for 
+    finding Spearman Rho.
 
     :param list of State objects
     :return N/A (the list will be sorted)
@@ -208,12 +212,13 @@ def binarySearch(stateList, stateName):
     
 def sequentialSearch(stateList, stateName, rho):
     """
-    This is the implementation of sequential sort
-    that sorts the States in the given list by fatality
-    rate.
+    This is the implementation of sequential search,
+    and will either return the state object itself, or
+    it will return the index of the object in the list if
+    we are working with Spearman Rho.
 
-   :param list of State objects, name of State to be searched
-    :return State if found, -1 if not found
+   :param list of State objects, name of State to be searched, rho boolean
+    :return State or index if found, -1 if not found
     """
     size = len(stateList)
     i = 0
@@ -253,9 +258,21 @@ def findState(stateList, sortedByName):
     else:
         print("\nState not found.")
 
-
-#print Spearmans p correlation matrix
 def SpearmansMatrix(stateList):
+    """
+    This function computes and prints the
+    Spearman Rho matrix of the states in the
+    stateList. It copies the stateList into new
+    arrays, and then those arrays are sorted with
+    merge sort. 
+
+    The 6 Spearmans rho values are then calculated
+    and formatted, then printed to a table on the
+    terminal.
+
+    :param list of State objects
+    :return N/A
+    """
     CaseRate = stateList.copy()
     DeathRate = stateList.copy()
     MHI = stateList.copy()
@@ -282,11 +299,19 @@ def SpearmansMatrix(stateList):
     print("--------------------------------------------------------------------")
     print("|  Death Rate |     "+str(x4)+"     |     "+str(x5)+"     |     "+str(x6)+"     |")
     print("--------------------------------------------------------------------")
-
-
-
-    
+   
 def SpearmansRho(stateListR1, stateListR2):
+    """
+    This function calculates the Spearmans Rho
+    value for two different attributes of the stateList.
+    This is done by using two lists in the parameter, each
+    sorted by the attributes we want to compare, so that
+    we are able to use sequential search to get the index
+    (rank), for each state's attribute.
+
+    :param 2 list of the same State objects sorted by different attributes
+    :return Spearman's Rho value
+    """
     size = len(stateListR1) #R1 and R2 should be the same length
     sum_di_p2 = 0
     i = 0
@@ -300,11 +325,6 @@ def SpearmansRho(stateListR1, stateListR2):
     
     rho = float(1 - ((6 * sum_di_p2) / (size * (size**2 - 1))))
     return rho
-
-
-
-
-        
 
 # MAIN #
 print("CAP4630 Project 1 -- Python Basics")
